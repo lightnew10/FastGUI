@@ -53,10 +53,11 @@
             <groupId>fr.mrcubee.library</groupId>
             <artifactId>weak-utilities</artifactId>
             <version>1.0</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>fr.mrcubee.minecraft.library</groupId>
-            <artifactId>languagelib</artifactId>
+            <artifactId>plugin-finder</artifactId>
             <version>1.0</version>
             <scope>compile</scope>
         </dependency>

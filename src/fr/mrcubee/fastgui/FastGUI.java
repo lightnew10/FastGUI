@@ -2,7 +2,7 @@ package fr.mrcubee.fastgui;
 
 import fr.mrcubee.fastgui.inventory.FastInventory;
 import fr.mrcubee.fastgui.inventory.FastInventoryManager;
-import fr.mrcubee.langlib.util.PluginFinder;
+import fr.mrcubee.finder.plugin.PluginFinder;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
