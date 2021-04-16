@@ -139,7 +139,7 @@ public class FastInventory {
         int start = row * 9;
         int stop =  start + 9;
 
-        if (start < 1 || stop > this.inventorySize)
+        if (start < 0 || stop >= this.inventorySize)
             return false;
         for (int i = start; i < stop; i++)
             this.contents[i] = itemStack;
@@ -153,7 +153,7 @@ public class FastInventory {
      * @return Returns true if items are placed, otherwise returns false on error.
      */
     public boolean setColumn(int column, ItemStack itemStack) {
-        if (column < 1 || column > 9)
+        if (column < 0 || column >= 9)
             return false;
         for (int i = column; i < this.inventorySize; i += 9)
             this.contents[i] = itemStack;
