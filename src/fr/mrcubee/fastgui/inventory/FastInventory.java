@@ -137,7 +137,7 @@ public class FastInventory {
      */
     public boolean setRow(int row, ItemStack itemStack) {
         int start = row * 9;
-        int stop =  start + 9;
+        int stop = start + 9;
 
         if (start < 0 || stop >= this.inventorySize)
             return false;
