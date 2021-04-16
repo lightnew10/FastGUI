@@ -139,7 +139,7 @@ public class FastInventory {
         int start = row * 9;
         int stop = start + 9;
 
-        if (start < 0 || stop >= this.inventorySize)
+        if (start < 0 || stop > this.inventorySize)
             return false;
         for (int i = start; i < stop; i++)
             this.contents[i] = itemStack;
