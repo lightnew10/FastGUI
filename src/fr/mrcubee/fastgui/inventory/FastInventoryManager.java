@@ -10,6 +10,7 @@ import java.util.Set;
 
 /** This class manages the inventory created by a plugin.
  * @author MrCubee
+ * @Contributor Lightnew
  * @version 1.0
  * @since 1.0
  */
@@ -21,7 +22,7 @@ public class FastInventoryManager implements Listener {
     private final Set<FastInventory> inventories;
 
     public FastInventoryManager() {
-        this.inventories = new WeakHashSet<FastInventory>();
+        this.inventories = new WeakHashSet<>();
     }
 
     /** Create an inventory.
@@ -44,7 +45,7 @@ public class FastInventoryManager implements Listener {
         if (event == null)
             return;
         for (FastInventory fastInventory : this.inventories) {
-            if (fastInventory.playerExecute(event.getWhoClicked(), event.getSlot())
+            if (fastInventory.playerExecute(event, event.getWhoClicked(), event.getSlot())
             || fastInventory.isInventoryOpen(event.getWhoClicked())) {
                 event.setCancelled(true);
                 return;

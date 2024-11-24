@@ -1,12 +1,15 @@
 package fr.mrcubee.fastgui.inventory;
 
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 /** This class represents a item button in the inventory.
  * @author MrCubee
+ * @Contributor Lightnew
  * @version 1.0
  * @since 1.0
  */
@@ -24,8 +27,8 @@ public class ItemButton extends Button {
      * @param action The action to be performed by the button.
      * @param itemStack The item that represents the button.
      */
-    public ItemButton(FastInventory fastInventory, int slot, BiConsumer<? super Button, ? super HumanEntity> action, ItemStack itemStack) {
-        super(fastInventory, slot, action);
+    public ItemButton(FastInventory fastInventory, int slot, BiConsumer<? super Button, ? super HumanEntity> action, ItemStack itemStack, Consumer<? super InventoryClickEvent> event) {
+        super(fastInventory, slot, action, event);
         this.itemStack = itemStack;
     }
 

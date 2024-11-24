@@ -3,6 +3,7 @@ package fr.mrcubee.fastgui.inventory;
 import fr.mrcubee.weak.WeakHashSet;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -10,9 +11,11 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 /** This class builds the inventory that will be given to the player.
  * @author MrCubee
+ * @Contributor Lightnew
  * @version 1.0
  * @since 1.0
  */
@@ -37,6 +40,7 @@ public class FastInventory {
      * The default button instructions.
      */
     private BiConsumer<? super Button, HumanEntity> defaultButton;
+    private Consumer<? super InventoryClickEvent> defaultButtonEvent;
 
     /**
      * The element to use to fill all free slots.
@@ -55,10 +59,11 @@ public class FastInventory {
     protected FastInventory(int inventorySize) {
         this.inventorySize = inventorySize;
         this.contents = new ItemStack[this.inventorySize];
-        this.buttons = new HashSet<Button>();
+        this.buttons = new HashSet<>();
         this.defaultButton = null;
+        this.defaultButtonEvent = null;
         this.fillItem = null;
-        this.viewers = new WeakHashSet<HumanEntity>();
+        this.viewers = new WeakHashSet<>();
     }
 
     /** Defines the Item with which the constructor should fill the free slots.
@@ -165,8 +170,9 @@ public class FastInventory {
      * @param action The instructions to be executed by the button.
      * @return Returns the created button instance.
      */
-    public Button createDefaultButton(BiConsumer<? super Button, HumanEntity> action) {
+    public Button createDefaultButton(BiConsumer<? super Button, HumanEntity> action, Consumer<? super InventoryClickEvent> event) {
         this.defaultButton = action;
+        this.defaultButtonEvent = event;
         return getDefaultButton();
     }
 
@@ -177,7 +183,7 @@ public class FastInventory {
     public Button getDefaultButton() {
         if (this.defaultButton == null)
             return null;
-        return new Button(this, -1, this.defaultButton) {
+        return new Button(this, -1, this.defaultButton, this.defaultButtonEvent) {
             @Override
             public void remove() {
                 getFastInventory().defaultButton = null;
@@ -207,12 +213,12 @@ public class FastInventory {
      * @param action The instructions to be executed by the button.
      * @return Returns the created button instance.
      */
-    public Button createButton(int slot, BiConsumer<? super Button, HumanEntity> action) {
+    public Button createButton(int slot, BiConsumer<? super Button, HumanEntity> action, Consumer<? super InventoryClickEvent> event) {
         Button button;
 
         if (slot < 0 || slot >= this.inventorySize)
             return null;
-        button = new Button(this, slot, action);
+        button = new Button(this, slot, action, event);
         if (!this.buttons.add(button))
             return null;
         return button;
@@ -225,12 +231,12 @@ public class FastInventory {
      * @param action The instructions to be executed by the button.
      * @return Returns the created button instance.
      */
-    public ItemButton createItemButton(int slot, ItemStack itemStack, BiConsumer<? super Button, ? super HumanEntity> action) {
+    public ItemButton createItemButton(int slot, ItemStack itemStack, BiConsumer<? super Button, ? super HumanEntity> action, Consumer<? super InventoryClickEvent> event) {
         ItemButton button;
 
         if (slot < 0 || slot >= this.inventorySize)
             return null;
-        button = new ItemButton(this, slot, action, itemStack);
+        button = new ItemButton(this, slot, action, itemStack, event);
         if (!this.buttons.add(button))
             return null;
         return button;
@@ -244,15 +250,21 @@ public class FastInventory {
      * @param action The instructions to be executed by the button.
      * @return Returns the created button instance.
      */
-    public CustomItemButton createCustomItemButton(int slot, ItemStack itemStack, BiConsumer<? super HumanEntity, ItemStack> itemEditor, BiConsumer<? super Button, ? super HumanEntity> action) {
+    public CustomItemButton createCustomItemButton(int slot, ItemStack itemStack, BiConsumer<? super HumanEntity, ItemStack> itemEditor, BiConsumer<? super Button, ? super HumanEntity> action, Consumer<? super InventoryClickEvent> event) {
         CustomItemButton customItemButton;
 
         if (slot < 0 || slot >= this.inventorySize)
             return null;
-        customItemButton = new CustomItemButton(this, slot, action, itemStack, itemEditor);
+        customItemButton = new CustomItemButton(this, slot, action, itemStack, itemEditor, event);
         if (!this.buttons.add(customItemButton))
             return null;
         return customItemButton;
+    }
+    public CustomItemButton createCustomItemButton(int slot, ItemStack itemStack, Consumer<? super InventoryClickEvent> event) {
+        return createCustomItemButton(slot, itemStack, (a, b) -> {}, (a, b) -> {}, event);
+    }
+    public CustomItemButton createCustomItemButton(int slot, ItemStack itemStack, BiConsumer<? super Button, ? super HumanEntity> action) {
+        return createCustomItemButton(slot, itemStack, (a, b) -> {}, action, (a) -> {});
     }
 
     /** Get the button from a specific slot.
@@ -275,7 +287,7 @@ public class FastInventory {
      * @return Returns true if the button was deleted, otherwise false if no button was found at this slot.
      */
     public boolean removeButton(int slot) {
-        Button button = createButton(slot, null);
+        Button button = createButton(slot, null, null);
 
         return button != null && this.buttons.remove(button);
     }
@@ -346,6 +358,10 @@ public class FastInventory {
 
         if (player == null)
             return false;
+        if (this.viewers.contains(player)) {
+            player.closeInventory();
+            this.viewers.remove(player);
+        }
         inventory = buildInventory(player, title);
         if (inventory == null)
             return false;
@@ -380,20 +396,20 @@ public class FastInventory {
      * @param slot The clicked slot.
      * @return Returns true if the inventory to perform the action, otherwise returns false.
      */
-    public boolean playerExecute(HumanEntity player, int slot) {
+    public boolean playerExecute(InventoryClickEvent event, HumanEntity player, int slot) {
         Button defaultButton;
 
         if (player == null || !this.viewers.contains(player))
             return false;
         for (Button button : this.buttons) {
             if (button.slot == slot) {
-                button.execute(player);
+                button.execute(event, player);
                 return true;
             }
         }
         if (this.defaultButton == null)
             return true;
-        defaultButton = new Button(this, slot, this.defaultButton) {
+        defaultButton = new Button(this, slot, this.defaultButton, this.defaultButtonEvent) {
             @Override
             public void remove() {
                 getFastInventory().defaultButton = null;
@@ -404,7 +420,7 @@ public class FastInventory {
                 return Objects.hashCode(getFastInventory());
             }
         };
-        defaultButton.execute(player);
+        defaultButton.execute(event, player);
         return true;
     }
 }

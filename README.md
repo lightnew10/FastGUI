@@ -55,6 +55,7 @@ public class TestPlugin extends JavaPlugin {
         // Items you want to use
         ItemStack opItem = new ItemStack(Material.GOLDEN_APPLE);
         ItemStack deopItem = new ItemStack(Material.BARRIER);
+        ItemStack exampleItem = new ItemStack(Material.GRASS);
         ItemStack fillItem = new ItemStack(Material.APPLE);
 
         // Create an inventory with 1 single line (composed of 9 * 1 slots)
@@ -81,6 +82,17 @@ public class TestPlugin extends JavaPlugin {
         // When the player clicks on another slot it displays an error message.
         this.fastInventory.createDefaultButton((button, player) -> {
             player.sendMessage(ChatColor.RED + "No button in slot N°" + button.slot + ".");
+        });
+        
+        //Create item and use event directly here
+        this.fastInventory.createCustomItemButton(10, exampleItem, (event) -> {
+            //Use InventoryClickEvent here
+        });
+        
+        //Use system of action, used if item is clicked
+        this.fastInventory.createCustomItemButton(11, exampleItem, (button, player) -> {
+            //use action on click on item
+            player.sendMessage(ChatColor.RED + "Used!");
         });
 
         // Fill in the free slots in the first row with the desired item.
