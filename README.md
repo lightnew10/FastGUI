@@ -8,38 +8,36 @@
 
 #### Maven:
 Repository:
+[![](https://jitpack.io/v/lightnew10/FastGUI.svg)](https://jitpack.io/#lightnew10/FastGUI)
 ```xml
 <repositories>
     <repository>
-        <id>mrcubee-minecraft</id>
-        <url>http://nexus.mrcubee.net/repository/minecraft/</url>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
     </repository>
 </repositories>
 ```
 Dependency:
 ```xml
-<dependencies>  
-  <dependency>
-    <groupId>fr.mrcubee.minecraft.library</groupId>  
-    <artifactId>fastgui</artifactId>  
-    <version>1.0</version>  
-    <scope>compile</scope>  
-  </dependency>
+<dependencies>
+    <dependency>
+        <groupId>com.github.lightnew10</groupId>
+        <artifactId>FastGUI</artifactId>
+        <version>1.0</version>
+    </dependency>
  </dependencies>
 ```
 #### Gradle:
 Repository:
 ```groovy
 repositories {
-    maven {
-        url "http://nexus.mrcubee.net/repository/minecraft/"
-    }
+    maven { url 'https://jitpack.io' }
 }
 ```
 Dependency:
 ```groovy
 dependencies {
-    compile 'fr.mrcubee.minecraft.library:fastgui:1.0'
+    implementation 'com.github.lightnew10:FastGUI:1.0'
 }
 ```
 ### Use in the plugin.
