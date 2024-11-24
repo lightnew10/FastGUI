@@ -2,7 +2,6 @@ package fr.mrcubee.fastgui;
 
 import fr.mrcubee.fastgui.inventory.FastInventory;
 import fr.mrcubee.fastgui.inventory.FastInventoryManager;
-import fr.mrcubee.finder.plugin.PluginFinder;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
@@ -26,8 +25,7 @@ public class FastGUI {
      * @param line Number of lines that the inventory must have. (Between 1 and 6 inclusive)
      * @return Returns the created inventory. On error, returns null.
      */
-    public static FastInventory createInventory(int line) {
-        Plugin plugin = (Plugin) PluginFinder.INSTANCE.findPlugin();
+    public static FastInventory createInventory(Plugin plugin, int line) {
         FastInventoryManager inventoryManager;
 
         if (plugin == null) {

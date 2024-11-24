@@ -8,11 +8,6 @@
     <name>FastGUI</name>
     <description>Minecraft fast gui library.</description>
 
-    <organization>
-        <name>MrCubee</name>
-        <url>https://github.com/MrCubee</url>
-    </organization>
-
     <developers>
         <developer>
             <id>mrcubee</id>
@@ -20,25 +15,17 @@
             <email>contact@mrcubee.fr</email>
             <url>https://github.com/MrCubee</url>
         </developer>
+        <developer>
+            <id>lightnew</id>
+            <name>Lightnew</name>
+            <url>https://github.com/lightnew10</url>
+        </developer>
     </developers>
-
-    <distributionManagement>
-        <repository>
-            <id>mrcubee-public</id>
-            <url>http://nexus.mrcubee.net/repository/minecraft/</url>
-            <uniqueVersion>false</uniqueVersion>
-        </repository>
-    </distributionManagement>
-
-    <issueManagement>
-        <system>github</system>
-        <url>https://github.com/MrCubee/FastGui/issues</url>
-    </issueManagement>
 
     <repositories>
         <repository>
-            <id>mrcubee-public</id>
-            <url>http://nexus.mrcubee.net/repository/minecraft/</url>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
     </repositories>
 
@@ -48,18 +35,6 @@
             <artifactId>spigot-api</artifactId>
             <version>1.8.8-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>fr.mrcubee.library</groupId>
-            <artifactId>weak-utilities</artifactId>
-            <version>1.0</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>fr.mrcubee.minecraft.library</groupId>
-            <artifactId>plugin-finder</artifactId>
-            <version>1.0</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 

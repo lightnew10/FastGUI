@@ -1,6 +1,6 @@
 package fr.mrcubee.fastgui.inventory;
 
-import fr.mrcubee.weak.WeakHashSet;
+import fr.mrcubee.fastgui.tool.WeakHashSet;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
